@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>All Employees</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background-color: #f4f4f4;
+            padding: 2rem;
+        }
+        table {
+            width: 100%;
+            background-color: #fff;
+            border-collapse: collapse;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        img {
+            width: 100px;
+        }
+        .btn {
+            margin-bottom: 1rem;
+            padding: 8px 12px;
+            background: #28a745;
+            color: white;
+            border: none;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <a href="/admin/add" class="btn">Add New Employee</a>
+    <h2>Employee List</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>QR Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="employee : ${employees}">
+                <td th:text="${employee.empId}"></td>
+                <td th:text="${employee.name}"></td>
+    <td th:text="${employee.token}"></td>
+    
+    <!-- Display QR code using external API -->
+    <td>
+        <img th:src="@{'https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=' + ${baseUrl} + '?token=' + ${employee.token}}" width="100"/>
+        <br/>
+        <a th:href="@{'https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=' + ${baseUrl} + '?token=' + ${employee.token}}" download="QR_${employee.empId}.png">
+            <button>📥 Download QR</button>
+        </a>
+    </td>
+</tr>
+
+        </tbody>
+    </table>
+</body>
+</html>

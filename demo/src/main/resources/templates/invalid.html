@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Invalid Token</title>
+    <meta http-equiv="refresh" content="5; url='/'" />
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f2f2f2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        h1 {
+            color: red;
+            margin-bottom: 10px;
+        }
+        p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h1>❌ Invalid Token</h1>
+    <p>The attendance marking token is invalid or expired.</p>
+    <p>Please contact your administrator.</p>
+    <p>You will be redirected to home shortly.</p>
+</div>
+</body>
+</html>

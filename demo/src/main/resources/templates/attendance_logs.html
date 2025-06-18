@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Attendance Logs</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f8f8f8;
+            padding: 20px;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .search-box {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .search-box input {
+            padding: 8px;
+            width: 250px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+    </style>
+    <script>
+        function filterTable() {
+            const input = document.getElementById("search").value.toLowerCase();
+            const rows = document.querySelectorAll("table tbody tr");
+
+            rows.forEach(row => {
+                const empId = row.cells[1].innerText.toLowerCase();
+                const token = row.cells[2].innerText.toLowerCase();
+                row.style.display = (empId.includes(input) || token.includes(input)) ? "" : "none";
+            });
+        }
+    </script>
+</head>
+<body>
+    <h2>📋 Attendance Logs</h2>
+    <div class="search-box">
+        <input type="text" id="search" onkeyup="filterTable()" placeholder="Search by Employee ID or Token">
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Employee ID</th>
+                <th>Token</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="entry : ${logs}">
+                <td th:text="${entry.id}"></td>
+                <td th:text="${entry.empId}"></td>
+                <td th:text="${entry.token}"></td>
+                <td th:text="${entry.timestamp}"></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
