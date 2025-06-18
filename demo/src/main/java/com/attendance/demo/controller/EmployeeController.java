@@ -18,7 +18,7 @@ public class EmployeeController {
     @GetMapping("/employees")
 public String viewEmployees(Model model) {
     model.addAttribute("employees", employeeRepository.findAll());
-    model.addAttribute("baseUrl", "http://localhost:8080/mark?token="); // Update base URL
+    model.addAttribute("baseUrl", "https://qrattendance-6dxo.onrender.com/mark?token="); // Update base URL
     return "employee-list";
 }
 
