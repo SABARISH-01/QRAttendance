@@ -18,7 +18,7 @@ public class DemoApplication implements CommandLineRunner {
     public void run(String... args) {
         String empId = "EMP001";
         String token = "abc123";
-        String qrText = "http://localhost:8080/mark?empId=" + empId + "&token=" + token;
+        String qrText = "https://qrattendance-6dxo.onrender.com/mark?empId=" + empId + "&token=" + token;
         String filePath = "C:/Users/Admin/Desktop/qr_emp001.png";
 
         try {
