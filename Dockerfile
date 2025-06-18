@@ -1,5 +1,13 @@
-FROM eclipse-temurin:17-jdk-alpine
+# Stage 1: Build the application
+FROM maven:3.9.6-eclipse-temurin-17 AS builder
 WORKDIR /app
-COPY target/demo-0.0.1-SNAPSHOT.jar app.jar
+COPY demo/pom.xml demo/pom.xml
+COPY demo/src demo/src
+RUN mvn -f demo/pom.xml clean package -DskipTests
+
+# Stage 2: Run the application
+FROM eclipse-temurin:17-jdk
+WORKDIR /app
+COPY --from=builder /app/demo/target/*.jar app.jar
 EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "app.jar"]
