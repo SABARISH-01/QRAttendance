@@ -1,11 +1,9 @@
 services:
   - type: web
-    name: qr-attendance-app
+    name: qr-attendance
     runtime: docker
     repo: https://github.com/SABARISH-01/QRAttendance
-    region: oregon
     plan: free
     branch: main
-    dockerfilePath: ./Dockerfile
-    buildCommand: ""         # Leave empty for Docker
-    startCommand: ""         # Handled by Dockerfile
+    dockerfilePath: Dockerfile
+    autoDeploy: true
