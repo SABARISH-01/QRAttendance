@@ -1,11 +1,11 @@
 services:
   - type: web
     name: qr-attendance-app
-    env: docker
+    runtime: docker
+    repo: https://github.com/SABARISH-01/QRAttendance
+    region: oregon
     plan: free
     branch: main
     dockerfilePath: ./Dockerfile
-    autoDeploy: true
-    envVars:
-      - key: SPRING_DATASOURCE_URL
-        value: jdbc:h2:mem:testdb
+    buildCommand: ""         # Leave empty for Docker
+    startCommand: ""         # Handled by Dockerfile
