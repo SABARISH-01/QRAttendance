@@ -2,6 +2,8 @@ package com.attendance.demo.controller;
 
 import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,79 +29,76 @@ public class AttendanceController {
     @Autowired
     private EmployeeRepository employeeRepo;
 
-    // http://localhost:8080/mark?token=abcXYZ
     @GetMapping("/mark")
     public String markAttendance(@RequestParam String token, Model model) {
-    Employee employee = employeeRepo.findByToken(token);
+        Employee employee = employeeRepo.findByToken(token);
 
-    if (employee == null) {
-        return "invalid"; // Create a simple error page too
+        if (employee == null) {
+            return "invalid";
+        }
+
+        ZonedDateTime istTime = ZonedDateTime.now(ZoneId.of("Asia/Kolkata"));
+
+        Attendance entry = new Attendance();
+        entry.setEmpId(employee.getEmpId());
+        entry.setToken(token);
+        entry.setTimestamp(istTime.toLocalDateTime());
+
+        attendanceRepo.save(entry);
+
+        model.addAttribute("name", employee.getName());
+        model.addAttribute("empId", employee.getEmpId());
+        model.addAttribute("time", istTime.toLocalDateTime());
+
+        return "success";
     }
 
-    Attendance entry = new Attendance();
-    entry.setEmpId(employee.getEmpId());
-    entry.setToken(token);
-    entry.setTimestamp(LocalDateTime.now());
-
-    attendanceRepo.save(entry);
-
-    model.addAttribute("name", employee.getName());
-    model.addAttribute("empId", employee.getEmpId());
-    model.addAttribute("time", LocalDateTime.now());
-
-    return "success";
-}
-
-
-    // Admin view
     @GetMapping("/admin/attendance")
-public String viewAttendance(Model model) {
-    List<Attendance> logs = attendanceRepo.findAll();
+    public String viewAttendance(Model model) {
+        List<Attendance> logs = attendanceRepo.findAll();
 
-    List<Map<String, String>> formattedLogs = logs.stream().map(log -> {
-        Map<String, String> row = new HashMap<>();
-        row.put("empId", log.getEmpId());
-        row.put("token", log.getToken());
+        List<Map<String, String>> formattedLogs = logs.stream().map(log -> {
+            Map<String, String> row = new HashMap<>();
+            row.put("empId", log.getEmpId());
+            row.put("token", log.getToken());
 
-        // Fetch name using empId
-        Employee emp = employeeRepo.findById(log.getEmpId()).orElse(null);
-        row.put("name", emp != null ? emp.getName() : "Unknown");
+            Employee emp = employeeRepo.findById(log.getEmpId()).orElse(null);
+            row.put("name", emp != null ? emp.getName() : "Unknown");
 
-        LocalDateTime timestamp = log.getTimestamp();
-        row.put("date", timestamp.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-        row.put("time", timestamp.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")));
+            LocalDateTime timestamp = log.getTimestamp();
+            row.put("date", timestamp.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+            row.put("time", timestamp.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")));
 
-        return row;
-    }).toList();
+            return row;
+        }).toList();
 
-    model.addAttribute("logs", formattedLogs);
-    return "attendance_logs";
-}
+        model.addAttribute("logs", formattedLogs);
+        return "attendance_logs";
+    }
 
-@GetMapping("/admin/attendance/download")
-public void downloadAttendanceCsv(HttpServletResponse response) throws Exception {
-    response.setContentType("text/csv");
-    response.setHeader("Content-Disposition", "attachment; filename=attendance_logs.csv");
+    @GetMapping("/admin/attendance/download")
+    public void downloadAttendanceCsv(HttpServletResponse response) throws Exception {
+        response.setContentType("text/csv");
+        response.setHeader("Content-Disposition", "attachment; filename=attendance_logs.csv");
 
-    List<Attendance> logs = attendanceRepo.findAll();
+        List<Attendance> logs = attendanceRepo.findAll();
 
-    try (PrintWriter writer = response.getWriter()) {
-        writer.println("Employee ID,Name,Token,Date,Time");
+        try (PrintWriter writer = response.getWriter()) {
+            writer.println("Employee ID,Name,Token,Date,Time");
 
-        for (Attendance log : logs) {
-            String empId = log.getEmpId();
-            String token = log.getToken();
-            LocalDateTime time = log.getTimestamp();
+            for (Attendance log : logs) {
+                String empId = log.getEmpId();
+                String token = log.getToken();
+                LocalDateTime time = log.getTimestamp();
 
-            Employee emp = employeeRepo.findById(empId).orElse(null);
-            String name = emp != null ? emp.getName() : "Unknown";
+                Employee emp = employeeRepo.findById(empId).orElse(null);
+                String name = emp != null ? emp.getName() : "Unknown";
 
-            String date = time.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-            String timePart = time.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss"));
+                String date = time.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+                String timePart = time.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss"));
 
-            writer.printf("%s,%s,%s,%s,%s%n", empId, name, token, date, timePart);
+                writer.printf("%s,%s,%s,%s,%s%n", empId, name, token, date, timePart);
+            }
         }
     }
-}
-
 }
