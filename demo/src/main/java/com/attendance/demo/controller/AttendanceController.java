@@ -1,7 +1,10 @@
 package com.attendance.demo.controller;
 
+import java.io.PrintWriter;
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,6 +15,8 @@ import com.attendance.demo.Entity.Attendance;
 import com.attendance.demo.Entity.Employee;
 import com.attendance.demo.Repository.AttendanceRepository;
 import com.attendance.demo.Repository.EmployeeRepository;
+
+import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
 public class AttendanceController {
@@ -48,9 +53,53 @@ public class AttendanceController {
 
     // Admin view
     @GetMapping("/admin/attendance")
-    public String viewAttendance(Model model) {
-        List<Attendance> logs = attendanceRepo.findAll();
-        model.addAttribute("logs", logs);
-        return "attendance_logs"; // thymeleaf template
+public String viewAttendance(Model model) {
+    List<Attendance> logs = attendanceRepo.findAll();
+
+    List<Map<String, String>> formattedLogs = logs.stream().map(log -> {
+        Map<String, String> row = new HashMap<>();
+        row.put("empId", log.getEmpId());
+        row.put("token", log.getToken());
+
+        // Fetch name using empId
+        Employee emp = employeeRepo.findById(log.getEmpId()).orElse(null);
+        row.put("name", emp != null ? emp.getName() : "Unknown");
+
+        LocalDateTime timestamp = log.getTimestamp();
+        row.put("date", timestamp.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        row.put("time", timestamp.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss")));
+
+        return row;
+    }).toList();
+
+    model.addAttribute("logs", formattedLogs);
+    return "attendance_logs";
+}
+
+@GetMapping("/admin/attendance/download")
+public void downloadAttendanceCsv(HttpServletResponse response) throws Exception {
+    response.setContentType("text/csv");
+    response.setHeader("Content-Disposition", "attachment; filename=attendance_logs.csv");
+
+    List<Attendance> logs = attendanceRepo.findAll();
+
+    try (PrintWriter writer = response.getWriter()) {
+        writer.println("Employee ID,Name,Token,Date,Time");
+
+        for (Attendance log : logs) {
+            String empId = log.getEmpId();
+            String token = log.getToken();
+            LocalDateTime time = log.getTimestamp();
+
+            Employee emp = employeeRepo.findById(empId).orElse(null);
+            String name = emp != null ? emp.getName() : "Unknown";
+
+            String date = time.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            String timePart = time.format(java.time.format.DateTimeFormatter.ofPattern("HH:mm:ss"));
+
+            writer.printf("%s,%s,%s,%s,%s%n", empId, name, token, date, timePart);
+        }
     }
+}
+
 }

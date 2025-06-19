@@ -60,24 +60,36 @@
     <div class="search-box">
         <input type="text" id="search" onkeyup="filterTable()" placeholder="Search by Employee ID or Token">
     </div>
+<div class="search-box">
+    <input type="text" id="search" onkeyup="filterTable()" placeholder="Search by Employee ID or Token">
+    <br><br>
+    <a href="/admin/attendance/download">
+        <button style="padding: 10px 20px; background-color: #2ecc71; color: white; border: none; border-radius: 5px;">
+            ⬇️ Download CSV
+        </button>
+    </a>
+</div>
 
     <table>
         <thead>
-            <tr>
-                <th>ID</th>
-                <th>Employee ID</th>
-                <th>Token</th>
-                <th>Timestamp</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="entry : ${logs}">
-                <td th:text="${entry.id}"></td>
-                <td th:text="${entry.empId}"></td>
-                <td th:text="${entry.token}"></td>
-                <td th:text="${entry.timestamp}"></td>
-            </tr>
-        </tbody>
+    <tr>
+        <th>Employee ID</th>
+        <th>Name</th>
+        <th>Token</th>
+        <th>Date</th>
+        <th>Time</th>
+    </tr>
+</thead>
+<tbody>
+    <tr th:each="log : ${logs}">
+        <td th:text="${log.empId}"></td>
+        <td th:text="${log.name}"></td>
+        <td th:text="${log.token}"></td>
+        <td th:text="${log.date}"></td>
+        <td th:text="${log.time}"></td>
+    </tr>
+</tbody>
+
     </table>
 </body>
 </html>
