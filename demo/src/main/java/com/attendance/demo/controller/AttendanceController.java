@@ -40,7 +40,7 @@ public class AttendanceController {
         for (Cookie cookie : cookies) {
             if ("attendance_marked".equals(cookie.getName())) {
                 model.addAttribute("message", "❌ You have already marked attendance today from this device.");
-                return "already_marked";  // Create this Thymeleaf page
+                return "already_marked";  
             }
         }
     }

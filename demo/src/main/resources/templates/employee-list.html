@@ -2,58 +2,10 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>All Employees</title>
-    <style>
-        body {
-            font-family: sans-serif;
-            background-color: #f4f4f4;
-            padding: 2rem;
-        }
-        table {
-            width: 100%;
-            background-color: #fff;
-            border-collapse: collapse;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        th, td {
-            padding: 12px;
-            text-align: center;
-            border-bottom: 1px solid #ddd;
-        }
-        img {
-            width: 100px;
-        }
-        .btn {
-            margin-bottom: 1rem;
-            padding: 8px 12px;
-            background: #28a745;
-            color: white;
-            border: none;
-            text-decoration: none;
-            border-radius: 5px;
-            display: inline-block;
-        }
-        .btn-edit {
-            background-color: #007bff;
-            margin: 5px 2px;
-        }
-        .btn-delete {
-            background-color: #dc3545;
-            margin: 5px 2px;
-        }
-        button {
-            border: none;
-            border-radius: 5px;
-            padding: 6px 10px;
-            cursor: pointer;
-            font-size: 14px;
-        }
-        h2 {
-            margin-bottom: 20px;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 </head>
 <body>
-    <img src="/images/logo.jpg" alt="Logo" style="position: absolute; top: 20px; right: 20px; width: 100px;">
+    <div th:replace="fragments/header :: header"></div>
 
     <a href="/admin/add" class="btn">➕ Add New Employee</a>
     <h2>Employee List</h2>
@@ -93,5 +45,8 @@
             </tr>
         </tbody>
     </table>
+    <!-- Insert footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
 </body>
 </html>

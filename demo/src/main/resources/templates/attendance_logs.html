@@ -2,54 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Attendance Logs</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #f8f8f8;
-            padding: 20px;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        .search-box {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .search-box input {
-            padding: 8px;
-            width: 250px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            background-color: #fff;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        th, td {
-            padding: 12px;
-            text-align: center;
-            border-bottom: 1px solid #eee;
-        }
-        th {
-            background-color: #3498db;
-            color: white;
-        }
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-        .delete-btn {
-            background-color: red;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
     <script>
         function filterTable() {
             const input = document.getElementById("search").value.toLowerCase();
@@ -64,7 +17,7 @@
     </script>
 </head>
 <body>
-    <img src="/images/logo.jpg" alt="Logo" style="position: absolute; top: 20px; left: 20px; width: 100px;">
+    <div th:replace="fragments/header :: header"></div>
     <h2>📋 Attendance Logs</h2>
 <div class="search-box">
     <input type="text" id="search" onkeyup="filterTable()" placeholder="Search by Employee ID or Token">
@@ -103,5 +56,8 @@
     </tr>
     </tbody>
 </table>
+<!-- Insert footer -->
+<div th:replace="fragments/footer :: footer"></div>
+
 </body>
 </html>
