@@ -102,4 +102,12 @@ public class AttendanceController {
             }
         }
     }
+
+    @GetMapping("/admin/attendance/delete/{id}")
+public String deleteAttendance(@PathVariable("id") Long id) {
+    attendanceRepo.deleteById(id);
+    return "redirect:/admin/attendance";
+}
+
+
 }
