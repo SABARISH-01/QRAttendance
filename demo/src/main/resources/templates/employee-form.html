@@ -3,6 +3,7 @@
 <head>
     <title th:text="${employee.empId == null} ? 'Add Employee' : 'Edit Employee'">Employee Form</title>
     <link rel="stylesheet" th:href="@{/css/style.css}">
+    
 </head>
 <body>
     <form th:action="@{${employee.empId == null} ? '/admin/add' : '/admin/update'}" method="post" th:object="${employee}">
