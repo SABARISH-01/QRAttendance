@@ -87,18 +87,19 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="log : ${logs}">
-        <td th:text="${log.empId}"></td>
-        <td th:text="${log.name}"></td>
-        <td th:text="${log.token}"></td>
-        <td th:text="${log.date}"></td>
-        <td th:text="${log.time}"></td>
-        <td>
-            <form th:action="@{'/admin/attendance/delete/' + ${log.id}}" method="get" onsubmit="return confirm('Are you sure you want to delete this log?')">
-                <button type="submit" class="delete-btn">❌ Delete</button>
-            </form>
-        </td>
-    </tr>
+     <tr th:each="log : ${logs}">
+                <td th:text="${log.empId}"></td>
+                <td th:text="${#lists.find(employees, emp -> emp.empId == log.empId)?.name}">Name</td>
+                <td th:text="${log.token}"></td>
+                <td th:text="${#temporals.format(log.timestamp, 'dd/MM/yyyy')}"></td>
+                <td th:text="${#temporals.format(log.timestamp, 'HH:mm:ss')}"></td>
+                <td>
+                    <form th:action="@{'/admin/attendance/delete/' + ${log.id}}" method="post" style="margin:0;" 
+      onsubmit="return confirm('Are you sure you want to delete this log?');">
+    <button type="submit" class="btn-delete">Delete</button>
+       </form>
+                </td>
+            </tr>
     </tbody>
 </table>
 </body>
