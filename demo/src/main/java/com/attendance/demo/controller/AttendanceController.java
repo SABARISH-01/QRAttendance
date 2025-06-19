@@ -41,6 +41,7 @@ public class AttendanceController {
 
         Attendance entry = new Attendance();
         entry.setEmpId(employee.getEmpId());
+        entry.setEmpName(employee.getName()); 
         entry.setToken(token);
         entry.setTimestamp(istTime.toLocalDateTime());
 
