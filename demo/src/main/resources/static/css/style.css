@@ -6,6 +6,7 @@ body {
     padding: 20px;
     color: #2c3e50;
     line-height: 1.6;
+    padding-bottom: 60px;
 }
 
 h1, h2 {
@@ -86,12 +87,18 @@ header img {
 
 /* Footer */
 footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
     text-align: center;
     background-color: #14532d;
     padding: 12px;
-    margin-top: 50px;
     color: #ffffff;
+    font-size: 14px;
+    z-index: 1000;
 }
+
 
 /* Search box */
 .search-box {
@@ -123,4 +130,11 @@ footer {
     gap: 16px;
     margin-top: 20px;
     justify-content: center;
+}
+.logo-center {
+    display: block;
+    margin: 0 auto;
+    max-height: 80px;
+width: auto;
+    margin-bottom: 20px;
 }
