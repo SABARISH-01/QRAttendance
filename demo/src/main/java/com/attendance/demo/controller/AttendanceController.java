@@ -58,8 +58,9 @@ public class AttendanceController {
     public String viewAttendance(Model model) {
         List<Attendance> logs = attendanceRepo.findAll();
 
-        List<Map<String, String>> formattedLogs = logs.stream().map(log -> {
-            Map<String, String> row = new HashMap<>();
+        List<Map<String, Object>> formattedLogs = logs.stream().map(log -> {
+            Map<String, Object> row = new HashMap<>();
+            row.put("id", log.getId());
             row.put("empId", log.getEmpId());
             row.put("token", log.getToken());
 
@@ -103,11 +104,12 @@ public class AttendanceController {
         }
     }
 
-    @GetMapping("/admin/attendance/delete/{id}")
+    @PostMapping("/admin/attendance/delete/{id}")
 public String deleteAttendance(@PathVariable("id") Long id) {
     attendanceRepo.deleteById(id);
     return "redirect:/admin/attendance";
 }
+
 
 
 }

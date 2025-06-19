@@ -94,9 +94,9 @@
         <td th:text="${log['date']}"></td>
         <td th:text="${log['time']}"></td>
         <td>
-            <form th:action="@{'/admin/attendance/delete/' + ${log['token']}}" method="post"
+            <form th:action="@{'/admin/attendance/delete/' + ${log['id']}}" method="post"
                   onsubmit="return confirm('Are you sure you want to delete this log?');">
-                <button type="submit" class="btn-delete">Delete</button>
+                <button type="submit" class="btn-delete">🚮</button>
             </form>
         </td>
     </tr>
