@@ -18,6 +18,8 @@ import com.attendance.demo.Entity.Employee;
 import com.attendance.demo.Repository.AttendanceRepository;
 import com.attendance.demo.Repository.EmployeeRepository;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 @Controller
@@ -30,7 +32,18 @@ public class AttendanceController {
     private EmployeeRepository employeeRepo;
 
     @GetMapping("/mark")
-    public String markAttendance(@RequestParam String token, Model model) {
+    public String markAttendance(@RequestParam String token,HttpServletRequest request,
+                             HttpServletResponse response, Model model) {
+
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+        for (Cookie cookie : cookies) {
+            if ("attendance_marked".equals(cookie.getName())) {
+                model.addAttribute("message", "❌ You have already marked attendance today from this device.");
+                return "already_marked";  // Create this Thymeleaf page
+            }
+        }
+    }
         Employee employee = employeeRepo.findByToken(token);
 
         if (employee == null) {
@@ -46,6 +59,11 @@ public class AttendanceController {
         entry.setTimestamp(istTime.toLocalDateTime());
 
         attendanceRepo.save(entry);
+
+        Cookie attendanceCookie = new Cookie("attendance_marked", "true");
+        attendanceCookie.setMaxAge(20 * 60 * 60); // 20 hours
+        attendanceCookie.setPath("/");
+        response.addCookie(attendanceCookie);
 
         model.addAttribute("name", employee.getName());
         model.addAttribute("empId", employee.getEmpId());
