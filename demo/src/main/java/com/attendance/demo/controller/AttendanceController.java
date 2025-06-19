@@ -51,7 +51,7 @@ public class AttendanceController {
         model.addAttribute("empId", employee.getEmpId());
         model.addAttribute("time", istTime.toLocalDateTime());
 
-        return "success";
+        return "attendance_marked";
     }
 
     @GetMapping("/admin/attendance")
